@@ -5,7 +5,7 @@ return {
       -- Optional: set a default test runner for your language
       vim.g["test#strategy"] = "toggleterm" -- or "vimux", "dispatch", "toggleterm", etc.
 
-      --       -- Treat Groovy files as Java
+      -- Treat Groovy files as Java
       vim.g["test#filetypes"] = {
         groovy = "java",
       }
@@ -21,11 +21,12 @@ return {
       -- vim.g["test#java#maventest#options"] = "test"
     end,
     keys = {
-      { "<leader>tn", ":TestNearest<CR>", desc = "Run nearest test" },
-      { "<leader>tf", ":TestFile<CR>", desc = "Run test file" },
-      { "<leader>ts", ":TestSuite<CR>", desc = "Run test suite" },
-      { "<leader>tl", ":TestLast<CR>", desc = "Run last test" },
-      { "<leader>tv", ":TestVisit<CR>", desc = "Visit test file" },
+      { "<leader>tm", desc = "Run Tests Maven" },
+      { "<leader>tmr", ":TestNearest<CR>", desc = "Run nearest test" },
+      { "<leader>tmf", ":TestFile<CR>", desc = "Run test file" },
+      { "<leader>tms", ":TestSuite<CR>", desc = "Run test suite" },
+      { "<leader>tml", ":TestLast<CR>", desc = "Run last test" },
+      { "<leader>tmv", ":TestVisit<CR>", desc = "Visit test file" },
     },
   },
 }
