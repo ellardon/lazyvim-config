@@ -5,6 +5,13 @@ vim.keymap.set("v", "<leader>y", '"*y')
 vim.keymap.set("n", "<leader>p", '"*p')
 vim.keymap.set("n", "<A-Left>", "<cmd>bprevious<cr>")
 vim.keymap.set("n", "<A-Right>", "<cmd>bnext<cr>")
+-- Forward <A-Up>/<A-Down> to <A-k>/<A-j>
+vim.keymap.set("n", "<A-Up>", "<A-k>", { remap = true, desc = "Move Up" })
+vim.keymap.set("n", "<A-Down>", "<A-j>", { remap = true, desc = "Move Down" })
+vim.keymap.set("i", "<A-Up>", "<A-k>", { remap = true, desc = "Move Up" })
+vim.keymap.set("i", "<A-Down>", "<A-j>", { remap = true, desc = "Move Down" })
+vim.keymap.set("v", "<A-Up>", "<A-k>", { remap = true, desc = "Move Up" })
+vim.keymap.set("v", "<A-Down>", "<A-j>", { remap = true, desc = "Move Down" })
 
 -- Default ToggleTerm
 vim.keymap.set("n", "<leader>ft", "<cmd>ToggleTerm<cr>", { desc = "Toggle Terminal" })
