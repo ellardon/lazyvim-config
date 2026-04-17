@@ -8,6 +8,7 @@ return {
   opts = {
     picker = "snacks",
     enable_debug_logging = true,
+    default_to_projects_v2 = false,
     suppress_missing_scope = {
       projects_v2 = true,
     },
