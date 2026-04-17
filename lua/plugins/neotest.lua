@@ -1,66 +1,49 @@
 return {
   {
     "rcasia/neotest-java",
-    ft = "java",
-    dependencies = {
-      "mfussenegger/nvim-jdtls",
-      "mfussenegger/nvim-dap", -- for the debugger
-      "rcarriga/nvim-dap-ui", -- recommended
-      "theHamsta/nvim-dap-virtual-text", -- recommended
-    },
-    -- init = function()
-    --   -- override the default keymaps.
-    --   -- needed until neotest-java is integrated in LazyVim
-    --   local keys = require("lazyvim.plugins.lsp.keymaps").get()
-    --   -- run test file
-    --   keys[#keys + 1] = {
-    --     "<leader>tt",
-    --     function()
-    --       require("neotest").run.run(vim.fn.expand("%"))
-    --     end,
-    --     mode = "n",
-    --   }
-    --   -- run nearest test
-    --   keys[#keys + 1] = {
-    --     "<leader>tr",
-    --     function()
-    --       require("neotest").run.run()
-    --     end,
-    --     mode = "n",
-    --   }
-    --   -- debug test file
-    --   keys[#keys + 1] = {
-    --     "<leader>tD",
-    --     function()
-    --       require("neotest").run.run({ strategy = "dap" })
-    --     end,
-    --     desc = "Debug Nearest Test",
-    --     mode = "n",
-    --   }
-    --   -- debug nearest test
-    --   keys[#keys + 1] = {
-    --     "<leader>td",
-    --     function()
-    --       require("neotest").run.run({ vim.fn.expand("%"), strategy = "dap" })
-    --     end,
-    --     desc = "Debug All Tests",
-    --     mode = "n",
-    --   }
-    -- end,
   },
   {
     "nvim-neotest/neotest",
-    dependencies = {
-      "nvim-neotest/nvim-nio",
-      "nvim-lua/plenary.nvim",
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    opts = {
-      adapters = {
-        ["neotest-java"] = {
-          -- config here
-        },
+    opts = { adapters = { "neotest-java" } },
+    keys = {
+      {
+        "<leader>tT",
+        function()
+          require("nio").run(function()
+            local neotest = require("neotest")
+            local nio = require("nio")
+            local file = nio.fn.expand("%:p")
+            -- get_tree_from_args must be called in an async context
+            local tree = neotest.run.get_tree_from_args({ file })
+            if not tree then
+              vim.notify("No tests found in current file", vim.log.levels.WARN)
+              return
+            end
+            -- Collect all test-level nodes
+            local tests = {}
+            for _, node in tree:iter_nodes() do
+              local data = node:data()
+              if data.type == "test" then
+                tests[#tests + 1] = data
+              end
+            end
+            if #tests == 0 then
+              vim.notify("No individual tests found in current file", vim.log.levels.WARN)
+              return
+            end
+            -- nio.ui.select works correctly inside async context
+            local choice = nio.ui.select(tests, {
+              prompt = "Select test to run:",
+              format_item = function(item)
+                return item.name
+              end,
+            })
+            if choice then
+              neotest.run.run(choice.id)
+            end
+          end)
+        end,
+        desc = "Pick and Run Test (Neotest)",
       },
     },
   },
